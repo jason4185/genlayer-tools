@@ -1,6 +1,6 @@
 # GenLayer Studio — UX Improvements & Known Limitations
 
-This document was written after building and testing four Intelligent Contracts on GenLayer Studio during Testnet Bradbury — a price feed oracle, a weather oracle, a social media oracle and a secure API key gateway. The issues listed here were all encountered during real development sessions, not theoretical scenarios. Each one includes what happened, how it affected the workflow, a suggested fix, and where applicable a screenshot from testing.
+This document was written after building and testing four Intelligent Contracts on GenLayer Studio — a price feed oracle, a weather oracle, a social media oracle and a secure API key gateway. The issues listed here were all encountered during real development sessions, not theoretical scenarios. Each one includes what happened, how it affected the workflow, a suggested fix, and where applicable a screenshot from testing.
 
 ---
 
@@ -122,7 +122,7 @@ Automatically refresh all read method responses after a write transaction reache
 
 
 
-## Known Limitations Encountered on Testnet Bradbury
+## Known Limitations Encountered on GenLayer Studio
 
 ### 1. Many Common APIs Block GenLayer Validators
 
@@ -155,7 +155,7 @@ Consider documenting a list of confirmed compatible APIs for developers. A curat
 
 ### 2. `gl.message.sender_account` Not Reliable on Testnet
 
-This feature is supposed to return the wallet address of whoever is calling a contract method. During testing on Testnet Bradbury it did not work reliably in write methods, meaning caller identity could not be automatically verified inside a transaction.
+This feature is supposed to return the wallet address of whoever is calling a contract method. During testing on GenLayer Studio it did not work reliably in write methods, meaning caller identity could not be automatically verified inside a transaction.
 
 **Impact:**
 The whitelist enforcement feature in the Key Vault contract could not be fully implemented on testnet. A workaround was used — requiring callers to pass their wallet address as an explicit method parameter — but this is less secure than automatic identity verification.
@@ -166,7 +166,7 @@ The whitelist enforcement feature in the Key Vault contract could not be fully i
 
 ### 3. `assert` Statements Do Not Always Revert Transactions
 
-On Testnet Bradbury, a failed `assert` statement sometimes did not stop transaction execution. Transactions finalized as ACCEPTED even when the assertion condition was false, meaning certain validation checks did not behave as expected.
+On GenLayer Studio, a failed `assert` statement sometimes did not stop transaction execution. Transactions finalized as ACCEPTED even when the assertion condition was false, meaning certain validation checks did not behave as expected.
 
 **Workaround used:**
 Error messages were stored directly in contract state instead of relying on transaction reverts. Developers can read errors via `get_last_response()` or `get_audit_log()`.

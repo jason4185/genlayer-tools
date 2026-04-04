@@ -161,7 +161,7 @@ All owner methods require you to pass your `owner_address` to verify identity:
 
 ## Testnet Limitations
 
-Two limitations were discovered during testing on Testnet Bradbury and documented here for full transparency.
+Two limitations were discovered during testing on GenLayer Studio and documented here for full transparency.
 
 ### 1. `gl.message.sender_account` Not Supported
 
@@ -171,7 +171,7 @@ Two limitations were discovered during testing on Testnet Bradbury and documente
 
 ### 2. `assert` Statements Do Not Always Revert Transactions
 
-On Testnet Bradbury, failed assertions sometimes do not stop transaction execution. Transactions finalize as ACCEPTED even when a check fails.
+On GenLayer Studio (studionet), failed assertions sometimes do not stop transaction execution. Transactions finalize as ACCEPTED even when a check fails.
 
 **Workaround:** Rejections are logged to the audit log with a clear reason. Fetch errors are stored in `last_response` so the caller can read exactly what went wrong.
 

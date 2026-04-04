@@ -2,7 +2,7 @@
 
 A collection of reusable libraries and infrastructure tools for GenLayer Intelligent Contracts. Built as part of the GenLayer Builder Program under the Tools & Infrastructure bounty category.
 
-All contracts are deployed and tested on Testnet Bradbury. No API keys required for the price feed, weather and social media libraries.
+All contracts were developed and tested on GenLayer Studio. No API keys required for the price feed, weather and social media libraries.
 
 ---
 
@@ -59,13 +59,13 @@ A reusable security pattern for Intelligent Contracts that need to use private A
 ### 5. Studio UX Improvements
 **Folder:** `genlayer-studio-ux/`
 
-A document covering real UX issues and platform limitations discovered during development on Testnet Bradbury. Includes 8 UX improvement suggestions and 4 known testnet limitations with workarounds.
+A document covering real UX issues and platform limitations discovered during development on GenLayer Studio. Includes 8 UX improvement suggestions and 4 known testnet limitations with workarounds.
 
 ---
 
 ## Deployment Status
 
-All contracts deployed and tested on GenLayer Testnet Bradbury.
+All contracts deployed and tested on GenLayer GenLayer Studio (studionet).
 
 | Contract | Status |
 |---|---|

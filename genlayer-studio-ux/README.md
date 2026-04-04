@@ -1,6 +1,6 @@
 # GenLayer Studio — UX Improvements
 
-This folder documents real UX issues and platform limitations discovered while building four Intelligent Contracts on GenLayer Studio during Testnet Bradbury.
+This folder documents real UX issues and platform limitations discovered while building four Intelligent Contracts on GenLayer Studio (studionet).
 
 The contracts built and tested:
 - Price Feed Oracle — crypto, forex and commodities
@@ -18,7 +18,7 @@ Everything in this document comes from real development experience — not theor
 
 **1. UX Issues** — eight problems encountered while using GenLayer Studio, each with a description of what happened, the impact on development, and a suggested fix for the GenLayer team.
 
-**2. Known Limitations** — four platform-level limitations discovered on Testnet Bradbury, including which external APIs block GenLayer validator requests, how `gl.message.sender_account` behaves on testnet, and why `strict_eq` fails for live data fetches.
+**2. Known Limitations** — four platform-level limitations discovered while testing on GenLayer Studio, including which external APIs block GenLayer validator requests, how `gl.message.sender_account` behaves, and why `strict_eq` fails for live data fetches.
 
 ---
 
