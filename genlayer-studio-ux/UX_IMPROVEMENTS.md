@@ -22,7 +22,7 @@ Each occurrence required trial and error to identify the cause. Across all four 
 **Suggested fix:**
 Display the specific reason and line number that caused the schema to fail. Example:
 
-> "Could not load contract schema. Line 34: `int` state variables are not supported in GenVM. Use `str` instead."
+> "Could not load contract schema. Line 34: `int` state variables are not supported in GenVM. Use fixed-size types like `i32`, `u256`, or `bigint` instead."
 
 ---
 
@@ -153,20 +153,27 @@ Consider documenting a list of confirmed compatible APIs for developers. A curat
 
 ---
 
-### 2. `gl.message.sender_account` Not Reliable on Testnet
+### 2. `gl.message.sender_account` Renamed to `gl.message.sender_address`
 
-This feature is supposed to return the wallet address of whoever is calling a contract method. During testing on GenLayer Studio it did not work reliably in write methods, meaning caller identity could not be automatically verified inside a transaction.
+The caller identity property was renamed from `gl.message.sender_account` to `gl.message.sender_address` in a SDK update. The old property name silently fails — returning no data without any error or deprecation warning. Older examples and community tutorials still reference `sender_account`, causing developers to believe the feature is broken when they are simply using the outdated name.
+
+**What works:**
+The current property `gl.message.sender_address` functions correctly. The GenLayer storage documentation (docs.genlayer.com/developers/intelligent-contracts/storage) demonstrates its use: `self.minter = gl.message.sender_address`.
 
 **Impact:**
-The whitelist enforcement feature in the Key Vault contract could not be fully implemented on testnet. A workaround was used — requiring callers to pass their wallet address as an explicit method parameter — but this is less secure than automatic identity verification.
+During development of the Key Vault contract, the older name `gl.message.sender_account` was used based on earlier examples. It silently returned no data, making it appear that caller identity verification was broken on the platform. Hours were spent debugging before discovering the rename. The workaround — requiring callers to pass their wallet address as a parameter — was implemented unnecessarily.
 
-**Status:** Full enforcement works on mainnet where `gl.message.sender_account` is fully supported.
+**Suggested fix:**
+Add a migration note in the Messages documentation flagging the rename. Implement a runtime deprecation warning when `sender_account` is accessed, directing developers to use `sender_address` instead. Update or annotate all older example contracts that still reference the old name.
 
 ---
 
 ### 3. `assert` Statements Do Not Always Revert Transactions
 
 On GenLayer Studio, a failed `assert` statement sometimes did not stop transaction execution. Transactions finalized as ACCEPTED even when the assertion condition was false, meaning certain validation checks did not behave as expected.
+
+**Recommended alternative:**
+The GenLayer docs recommend using `raise gl.vm.UserError("message")` instead of `assert` for error handling. This preserves the error message in the transaction receipt and is designed for reliable transaction reversion.
 
 **Workaround used:**
 Error messages were stored directly in contract state instead of relying on transaction reverts. Developers can read errors via `get_last_response()` or `get_audit_log()`.
@@ -179,6 +186,9 @@ Error messages were stored directly in contract state instead of relying on tran
 
 **Workaround used:**
 Switched to `eq_principle.prompt_comparative` with a defined tolerance range. This allows validators to agree on results that are close enough rather than requiring identical outputs. For example, crypto prices within 2% of each other are considered equivalent.
+
+**Recommended approach from docs:**
+For numerical comparisons (prices, temperatures, percentages), the GenLayer docs recommend `gl.vm.run_nondet_unsafe` with a custom validator function that calculates tolerance in Python code — faster and more precise than asking an LLM to judge equivalence. `prompt_comparative` is best reserved for subjective text comparisons (summaries, analysis) where LLM judgment genuinely adds value.
 
 ---
 
@@ -194,6 +204,6 @@ Switched to `eq_principle.prompt_comparative` with a defined tolerance range. Th
 | Upgrade code — no confirmation | UX | Medium |
 | Read methods — no auto-refresh | UX | Medium |
 | APIs blocking validators | Limitation | High |
-| `gl.message.sender_account` unreliable | Limitation | High |
-| `assert` not reverting | Limitation | Medium |
-| `strict_eq` fails for live data | Limitation | High |
+| `gl.message.sender_account` renamed | Limitation | High — silent failure, needs deprecation warning |
+| `assert` not reverting | Limitation | Medium — use `gl.vm.UserError` as alternative |
+| `strict_eq` fails for live data | Limitation | High — use `run_nondet_unsafe` or `prompt_comparative` |
